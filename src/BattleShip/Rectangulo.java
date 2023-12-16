@@ -31,7 +31,7 @@ public class Rectangulo {
 
     public boolean esPosicionInside(Posicion targetPosicion) {
         return targetPosicion.x >= posicion.x && targetPosicion.y >= posicion.y
-                && targetPosicion.x < posicion.x + ancho && targetPosicion.y < position.y + altura;
+                && targetPosicion.x < posicion.x + ancho && targetPosicion.y < posicion.y + altura;
     }
 
 }

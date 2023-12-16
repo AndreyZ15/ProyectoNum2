@@ -12,7 +12,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     public enum GameState { PlacingShips, FiringShots, GameOver }
 
 
-    private StatusPanel statusPanel;
+    private EstadoPanel estadoPanel;
 
     private SelectionGrid computer;
 
@@ -149,7 +149,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     }
 
     private void doAITurn() {
-        Position aiMove = aiController.selectMove();
+        Position aiMove = aiController.seleccionarMovimiento();
         boolean hit = player.markPosition(aiMove);
         String hitMiss = hit ? "Hit" : "Missed";
         String destroyed = "";
