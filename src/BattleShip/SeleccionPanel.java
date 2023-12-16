@@ -143,7 +143,7 @@ public class SeleccionPanel extends Rectangulo{
     }
 
     public void colocarBarco(Barco barco, int gridX, int gridY) {
-        barcos.add(barco;
+        barcos.add(barco);
         if(barco.isSideways()) { // If the ship is horizontal
             for(int x = 0; x < barco.getSegments(); x++) {
                 marcadores[gridX+x][gridY].setAsShip(barcos.get(barcos.size()-1));
