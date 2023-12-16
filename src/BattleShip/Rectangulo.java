@@ -29,7 +29,7 @@ public class Rectangulo {
         return posicion;
     }
 
-    public boolean esPosicion(Posicion targetPosicion) {
+    public boolean esPosicionInside(Posicion targetPosicion) {
         return targetPosicion.x >= posicion.x && targetPosicion.y >= posicion.y
                 && targetPosicion.x < posicion.x + ancho && targetPosicion.y < position.y + altura;
     }
