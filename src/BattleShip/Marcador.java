@@ -11,7 +11,7 @@ public class Marcador extends Rectangle {
 
     private boolean verMarca;
 
-    private Ship barcoMarcado;
+    private Barco barcoMarcado;
 
     public Marker(int x, int y, int width, int height) {
         super(x, y, width, height);
