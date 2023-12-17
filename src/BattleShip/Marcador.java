@@ -13,7 +13,7 @@ public class Marcador extends Rectangle {
 
     private Barco barcoMarcado;
 
-    public Marker(int x, int y, int width, int height) {
+    public Marcador(int x, int y, int width, int height) {
         super(x, y, width, height);
         reset();
     }
@@ -23,7 +23,7 @@ public class Marcador extends Rectangle {
         verMarca = false;
     }
 
-    public void mark() {
+    public void Marcado() {
         if(!verMarca && esBarco()) {
             barcoMarcado.destruirSeccion();
         }
