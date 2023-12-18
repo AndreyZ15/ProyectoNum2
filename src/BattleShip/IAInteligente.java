@@ -45,7 +45,7 @@ public class IAInteligente extends BattleShipIA{
             if (maximizaraleatoadya) {
                 seleccionarMovimiento = EncontrarMejorPosicionAbierta();
             } else {
-
+                // Use a random move
                 seleccionarMovimiento = movimientovalido.get(0);
             }
         }

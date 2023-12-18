@@ -166,7 +166,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
 
     private void tryMovePlacingShip(Posicion mousePosition) {
-        if(jugador.esPosicionMarcada(mousePosition)) {
+        if(jugador.esPosicionInside(mousePosition)) {
             Posicion targetPos = jugador.getPosicionenPanel(mousePosition.x, mousePosition.y);
             updateShipPlacement(targetPos);
         }
@@ -199,7 +199,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     @Override
     public void mouseReleased(MouseEvent e) {
         Posicion mousePosition = new Posicion(e.getX(), e.getY());
-        if(gameState == GameState.PlacingShips && jugador.esPosicionMarcada(mousePosition)) {
+        if(gameState == GameState.PlacingShips && jugador.esPosicionInside(mousePosition)) {
             tryPlaceShip(mousePosition);
         } else if(gameState == GameState.FiringShots && computadora.esPosicionInside(mousePosition)) {
             tryFireAtComputer(mousePosition);
