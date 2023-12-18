@@ -50,7 +50,7 @@ public class Marcador extends Rectangulo {
         if(!verMarca) return;
 
         g.setColor(esBarco() ? Golpeado : Fallado);
-        g.fillRect(posicion.x+Redondeo+1, posicion.y+Redondeo+1, width-Redondeo*2, height-Redondeo*2);
+        g.fillRect(posicion.x+Redondeo+1, posicion.y+Redondeo+1, ancho-Redondeo*2, altura-Redondeo*2);
     }
 
 
