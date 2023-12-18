@@ -14,18 +14,18 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
     private EstadoPanel estadoPanel;
 
-    private SelectionGrid computer;
+    private SeleccionPanel computer;
 
-    private SelectionGrid player;
+    private SeleccionPanel player;
 
-    private BattleshipAI aiController;
+    private BattleShipIA iaController;
 
 
-    private Ship placingShip;
+    private Barco posicionamientoBarco;
 
-    private Position tempPlacingPosition;
+    private Posicion tempPosicionPosicionamiento;
 
-    private int placingShipIndex;
+    private int posicionBarcoIndex;
 
     private GameState gameState;
 
@@ -33,15 +33,15 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
 
     public GamePanel(int aiChoice) {
-        computer = new SelectionGrid(0,0);
-        player = new SelectionGrid(0,computer.getHeight()+50);
+        computer = new SeleccionPanel(0,0);
+        player = new SeleccionPanel(0,computer.getAltura()+50);
         setBackground(new Color(42, 136, 163));
-        setPreferredSize(new Dimension(computer.getWidth(), player.getPosition().y + player.getHeight()));
+        setPreferredSize(new Dimension(computer.getAncho(), player.getPosicion().y + player.getAltura()));
         addMouseListener(this);
         addMouseMotionListener(this);
-        if(aiChoice == 0) aiController = new SimpleRandomAI(player);
-        else aiController = new SmarterAI(player,aiChoice == 2,aiChoice == 2);
-        statusPanel = new StatusPanel(new Position(0,computer.getHeight()+1),computer.getWidth(),49);
+        if(aiChoice == 0) iaController = new IARadom(player);
+        else iaController = new SmarterAI(player,aiChoice == 2,aiChoice == 2);
+        statusPanel = new StatusPanel(new Position(0,computer.getHeight()+1),computer.getAncho(),49);
         restart();
     }
 

@@ -46,7 +46,7 @@ public class Marcador extends Rectangle {
         return barcoMarcado;
     }
 
-    public void pintura(Graphics g) {
+    public void paint(Graphics g) {
         if(!verMarca) return;
 
         g.setColor(esBarco() ? Golpeado : Fallado);

@@ -25,10 +25,10 @@ public class SeleccionPanel extends Rectangulo{
         mostrarBarco = false;
     }
 
-    public void Crear(Graphics g) {
+    public void paint(Graphics g) {
         for(Barco barco : barcos) {
-            if(mostrarBarco|| GamePanel.debugModeActive || barco.isDestroyed()) {
-                barco.Crear(g);
+            if(mostrarBarco|| GamePanel.debugModeActive || barco.isDestruido()) {
+                barco.paint(g);
             }
         }
         dibujarMarcadores(g);
@@ -53,7 +53,7 @@ public class SeleccionPanel extends Rectangulo{
 
         todoslosbarcosDestruidos = true;
         for(Barco barco : barcos) {
-            if(!barco.isDestroyed()) {
+            if(!barco.isDestruido()) {
                 todoslosbarcosDestruidos= false;
                 break;
             }
@@ -85,12 +85,12 @@ public class SeleccionPanel extends Rectangulo{
         if(sideways) { // handle the case when horizontal
             if(gridY > GRID_LARGO || gridX + segments > GRID_ANCHO) return false;
             for(int x = 0; x < segments; x++) {
-                if(marcadores[gridX+x][gridY].isBarco()) return false;
+                if(marcadores[gridX+x][gridY].esBarco()) return false;
             }
         } else { // handle the case when vertical
             if(gridY + segments > GRID_LARGO || gridX > GRID_ANCHO) return false;
             for(int y = 0; y < segments; y++) {
-                if(marcadores[gridX][gridY+y].isBarco()) return false;
+                if(marcadores[gridX][gridY+y].esBarco()) return false;
             }
         }
         return true;
@@ -113,7 +113,7 @@ public class SeleccionPanel extends Rectangulo{
     private void dibujarMarcadores(Graphics g) {
         for(int x = 0; x < GRID_ANCHO; x++) {
             for(int y = 0; y < GRID_LARGO; y++) {
-                marcadores[x][y].pintura(g);
+                marcadores[x][y].paint(g);
             }
         }
     }
@@ -147,11 +147,11 @@ public class SeleccionPanel extends Rectangulo{
         barcos.add(barco);
         if(barco.isTorcido()) { // If the ship is horizontal
             for(int x = 0; x < barco.getSegmentos(); x++) {
-                marcadores[gridX+x][gridY].setAsShip(barcos.get(barcos.size()-1));
+                marcadores[gridX+x][gridY].setBarco(barcos.get(barcos.size()-1));
             }
         } else { // If the ship is vertical
             for(int y = 0; y < barco.getSegmentos(); y++) {
-                marcadores[gridX][gridY+y].setAsShip(barcos.get(barcos.size()-1));
+                marcadores[gridX][gridY+y].setBarco(barcos.get(barcos.size()-1));
             }
         }
     }
