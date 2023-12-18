@@ -1,7 +1,7 @@
 package BattleShip;
 import java.awt.*;
 
-public class Marcador extends Rectangle {
+public class Marcador extends Rectangulo {
     private final Color Golpeado = new Color(219, 23, 23, 180);
 
     private final Color Fallado = new Color(26, 26, 97, 180);

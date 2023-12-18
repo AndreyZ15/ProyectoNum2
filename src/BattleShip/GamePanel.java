@@ -12,13 +12,13 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     public enum GameState { PlacingShips, FiringShots, GameOver }
 
 
-    private EstadoPanel estadoPanel;
+    private PanelControl panelControl;
 
-    private SeleccionPanel computer;
+    private SeleccionPanel computadora;
 
-    private SeleccionPanel player;
+    private SeleccionPanel jugador;
 
-    private BattleShipIA iaController;
+    private BattleShipIA iaControlador;
 
 
     private Barco posicionamientoBarco;
@@ -33,27 +33,27 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
 
     public GamePanel(int aiChoice) {
-        computer = new SeleccionPanel(0,0);
-        player = new SeleccionPanel(0,computer.getAltura()+50);
+        computadora = new SeleccionPanel(0,0);
+        jugador = new SeleccionPanel(0,computadora.getAltura()+50);
         setBackground(new Color(42, 136, 163));
-        setPreferredSize(new Dimension(computer.getAncho(), player.getPosicion().y + player.getAltura()));
+        setPreferredSize(new Dimension(computadora.getAncho(), jugador.getPosicion().y + jugador.getAltura()));
         addMouseListener(this);
         addMouseMotionListener(this);
-        if(aiChoice == 0) iaController = new IARadom(player);
-        else iaController = new SmarterAI(player,aiChoice == 2,aiChoice == 2);
-        statusPanel = new StatusPanel(new Position(0,computer.getHeight()+1),computer.getAncho(),49);
+        if(aiChoice == 0) iaControlador = new IARadom(jugador);
+        else iaControlador = new IAInteligente(jugador,aiChoice == 2,aiChoice == 2);
+        panelControl = new PanelControl(new Posicion(0,computadora.getAltura()+1),computadora.getAncho(),49);
         restart();
     }
 
 
     public void paint(Graphics g) {
         super.paint(g);
-        computer.paint(g);
-        player.paint(g);
+        computadora.paint(g);
+        jugador.paint(g);
         if(gameState == GameState.PlacingShips) {
-            placingShip.paint(g);
+            posicionamientoBarco.paint(g);
         }
-        statusPanel.paint(g);
+        panelControl.paint(g);
     }
 
 
@@ -63,8 +63,8 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         } else if(keyCode == KeyEvent.VK_R) {
             restart();
         } else if(gameState == GameState.PlacingShips && keyCode == KeyEvent.VK_Z) {
-            placingShip.toggleSideways();
-            updateShipPlacement(tempPlacingPosition);
+            posicionamientoBarco.cambiarTorcido();
+            updateShipPlacement(tempPosicionPosicionamiento);
         } else if(keyCode == KeyEvent.VK_D) {
             debugModeActive = !debugModeActive;
         }
@@ -73,38 +73,38 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
 
     public void restart() {
-        computer.reset();
-        player.reset();
+        computadora.reset();
+        jugador.reset();
         // Player can see their own ships by default
-        player.setShowShips(true);
-        aiController.reset();
-        tempPlacingPosition = new Position(0,0);
-        placingShip = new Ship(new Position(0,0),
-                new Position(player.getPosition().x,player.getPosition().y),
-                SelectionGrid.BOAT_SIZES[0], true);
-        placingShipIndex = 0;
-        updateShipPlacement(tempPlacingPosition);
-        computer.populateShips();
+        jugador.setMostrarBarco(true);
+        iaControlador.reset();
+        tempPosicionPosicionamiento = new Posicion(0,0);
+        posicionamientoBarco= new Barco(new Posicion(0,0),
+                new Posicion(jugador.getPosicion().x,jugador.getPosicion().y),
+                SeleccionPanel.BARCO_SIZES[0], true);
+        posicionBarcoIndex = 0;
+        updateShipPlacement(tempPosicionPosicionamiento);
+        computadora.populateShips();
         debugModeActive = false;
-        statusPanel.reset();
+        panelControl.reset();
         gameState = GameState.PlacingShips;
     }
 
 
-    private void tryPlaceShip(Position mousePosition) {
-        Position targetPosition = player.getPositionInGrid(mousePosition.x, mousePosition.y);
+    private void tryPlaceShip(Posicion mousePosition) {
+        Posicion targetPosition = jugador.getPosicionenPanel(mousePosition.x, mousePosition.y);
         updateShipPlacement(targetPosition);
-        if(player.canPlaceShipAt(targetPosition.x, targetPosition.y,
-                SelectionGrid.BOAT_SIZES[placingShipIndex],placingShip.isSideways())) {
+        if(jugador.sepuedePosicionarBarcoen(targetPosition.x, targetPosition.y,
+                SeleccionPanel.BARCO_SIZES[posicionBarcoIndex],posicionamientoBarco.isTorcido())) {
             placeShip(targetPosition);
         }
     }
 
 
-    private void placeShip(Position targetPosition) {
-        placingShip.setShipPlacementColour(Ship.ShipPlacementColour.Placed);
-        player.placeShip(placingShip,tempPlacingPosition.x,tempPlacingPosition.y);
-        placingShipIndex++;
+    private void placeShip(Posicion targetPosition) {
+        posicionamientoBarco.setColorPosicionBarco(Barco.ColorPosicionBarco.Placed);
+        jugador.colocarBarco(posicionamientoBarco,tempPosicionPosicionamiento.x,tempPosicionPosicionamiento.y);
+        posicionBarcoIndex++;
         // If there are still ships to place
         if(placingShipIndex < SelectionGrid.BOAT_SIZES.length) {
             placingShip = new Ship(new Position(targetPosition.x, targetPosition.y),
@@ -173,7 +173,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     }
 
 
-    private void updateShipPlacement(Position targetPos) {
+    private void updateShipPlacement(Posicion targetPos) {
         // Constrain to fit inside the grid
         if(placingShip.isSideways()) {
             targetPos.x = Math.min(targetPos.x, SelectionGrid.GRID_WIDTH - SelectionGrid.BOAT_SIZES[placingShipIndex]);

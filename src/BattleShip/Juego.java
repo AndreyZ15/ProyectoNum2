@@ -6,12 +6,12 @@ import java.awt.event.KeyListener;
 public class Juego implements KeyListener {
 
     public static void main(String[] args) {
-        Game game = new Game();
+        Juego game = new Juego();
     }
 
     private GamePanel gamePanel;
 
-    public Game() {
+    public Juego() {
         // Seleccionar la dificultad
         String[] options = new String[] {"Facil", "Medio", "Dificil"};
         String message = "Selecione la dificultad con la que desea jugar";
