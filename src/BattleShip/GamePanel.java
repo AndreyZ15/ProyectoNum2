@@ -106,68 +106,68 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         jugador.colocarBarco(posicionamientoBarco,tempPosicionPosicionamiento.x,tempPosicionPosicionamiento.y);
         posicionBarcoIndex++;
         // If there are still ships to place
-        if(placingShipIndex < SelectionGrid.BOAT_SIZES.length) {
-            placingShip = new Ship(new Position(targetPosition.x, targetPosition.y),
-                    new Position(player.getPosition().x + targetPosition.x * SelectionGrid.CELL_SIZE,
-                            player.getPosition().y + targetPosition.y * SelectionGrid.CELL_SIZE),
-                    SelectionGrid.BOAT_SIZES[placingShipIndex], true);
-            updateShipPlacement(tempPlacingPosition);
+        if(posicionBarcoIndex < SeleccionPanel.BARCO_SIZES.length) {
+            posicionamientoBarco = new Barco(new Posicion(targetPosition.x, targetPosition.y),
+                    new Posicion(jugador.getPosicion().x + targetPosition.x * SeleccionPanel.CELDA_SIZE,
+                            jugador.getPosicion().y + targetPosition.y * SeleccionPanel.CELDA_SIZE),
+                    SeleccionPanel.BARCO_SIZES[posicionBarcoIndex], true);
+            updateShipPlacement(tempPosicionPosicionamiento);
         } else {
             gameState = GameState.FiringShots;
-            statusPanel.setTopLine("Attack the Computer!");
-            statusPanel.setBottomLine("Destroy all Ships to win!");
+            panelControl.setLineasuperior("Ataque la computadora!");
+            panelControl.setLineainferior("Destruya todos los barcos para ganar!");
         }
     }
 
 
-    private void tryFireAtComputer(Position mousePosition) {
-        Position targetPosition = computer.getPositionInGrid(mousePosition.x,mousePosition.y);
+    private void tryFireAtComputer(Posicion mousePosition) {
+        Posicion targetPosition = computadora.getPosicionenPanel(mousePosition.x,mousePosition.y);
         // Ignore if position was already clicked
-        if(!computer.isPositionMarked(targetPosition)) {
+        if(!computadora.esPosicionMarcada(targetPosition)) {
             doPlayerTurn(targetPosition);
             // Only do the AI turn if the game didn't end from the player's turn.
-            if(!computer.areAllShipsDestroyed()) {
+            if(!computadora.estantodoslosbarcosdestruidos()) {
                 doAITurn();
             }
         }
     }
 
 
-    private void doPlayerTurn(Position targetPosition) {
-        boolean hit = computer.markPosition(targetPosition);
-        String hitMiss = hit ? "Hit" : "Missed";
+    private void doPlayerTurn(Posicion targetPosition) {
+        boolean hit = computadora.markPosition(targetPosition);
+        String hitMiss = hit ? "Chocado" : "Fallado";
         String destroyed = "";
-        if(hit && computer.getMarkerAtPosition(targetPosition).getAssociatedShip().isDestroyed()) {
-            destroyed = "(Destroyed)";
+        if(hit && computadora.getMarcadorenlaPosicion(targetPosition).getBarcoCerca().isDestruido()) {
+            destroyed = "(Destruido)";
         }
-        statusPanel.setTopLine("Player " + hitMiss + " " + targetPosition + destroyed);
-        if(computer.areAllShipsDestroyed()) {
+        panelControl.setLineasuperior("Jugador " + hitMiss + " " + targetPosition + destroyed);
+        if(computadora.estantodoslosbarcosdestruidos()) {
             // Player wins!
             gameState = GameState.GameOver;
-            statusPanel.showGameOver(true);
+            panelControl.JuegoTerminado(true);
         }
     }
 
     private void doAITurn() {
-        Position aiMove = aiController.seleccionarMovimiento();
-        boolean hit = player.markPosition(aiMove);
-        String hitMiss = hit ? "Hit" : "Missed";
+        Posicion aiMove = iaControlador.seleccionarMovimiento();
+        boolean hit = jugador.markPosition(aiMove);
+        String hitMiss = hit ? "Chocado" : "Fallado";
         String destroyed = "";
-        if(hit && player.getMarkerAtPosition(aiMove).getAssociatedShip().isDestroyed()) {
-            destroyed = "(Destroyed)";
+        if(hit && jugador.getMarcadorenlaPosicion(aiMove).getBarcoCerca().isDestruido()) {
+            destroyed = "(Destruido)";
         }
-        statusPanel.setBottomLine("Computer " + hitMiss + " " + aiMove + destroyed);
-        if(player.areAllShipsDestroyed()) {
+        panelControl.setLineainferior("Computadora " + hitMiss + " " + aiMove + destroyed);
+        if(jugador.estantodoslosbarcosdestruidos()) {
             // Computer wins!
             gameState = GameState.GameOver;
-            statusPanel.showGameOver(false);
+            panelControl.JuegoTerminado(false);
         }
     }
 
 
-    private void tryMovePlacingShip(Position mousePosition) {
-        if(player.isPositionInside(mousePosition)) {
-            Position targetPos = player.getPositionInGrid(mousePosition.x, mousePosition.y);
+    private void tryMovePlacingShip(Posicion mousePosition) {
+        if(jugador.esPosicionMarcada(mousePosition)) {
+            Posicion targetPos = jugador.getPosicionenPanel(mousePosition.x, mousePosition.y);
             updateShipPlacement(targetPos);
         }
     }
@@ -175,33 +175,33 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
     private void updateShipPlacement(Posicion targetPos) {
         // Constrain to fit inside the grid
-        if(placingShip.isSideways()) {
-            targetPos.x = Math.min(targetPos.x, SelectionGrid.GRID_WIDTH - SelectionGrid.BOAT_SIZES[placingShipIndex]);
+        if(posicionamientoBarco.isDestruido()) {
+            targetPos.x = Math.min(targetPos.x, SeleccionPanel.GRID_ANCHO - SeleccionPanel.BARCO_SIZES[posicionBarcoIndex]);
         } else {
-            targetPos.y = Math.min(targetPos.y, SelectionGrid.GRID_HEIGHT - SelectionGrid.BOAT_SIZES[placingShipIndex]);
+            targetPos.y = Math.min(targetPos.y, SeleccionPanel.GRID_LARGO - SeleccionPanel.BARCO_SIZES[posicionBarcoIndex]);
         }
         // Update drawing position to use the new target position
-        placingShip.setDrawPosition(new Position(targetPos),
-                new Position(player.getPosition().x + targetPos.x * SelectionGrid.CELL_SIZE,
-                        player.getPosition().y + targetPos.y * SelectionGrid.CELL_SIZE));
+        posicionamientoBarco.setCrearPosicion(new Posicion(targetPos),
+                new Posicion(jugador.getPosicion().x + targetPos.x * SeleccionPanel.CELDA_SIZE,
+                        jugador.getPosicion().y + targetPos.y * SeleccionPanel.CELDA_SIZE));
         // Store the grid position for other testing cases
-        tempPlacingPosition = targetPos;
+        tempPosicionPosicionamiento = targetPos;
         // Change the colour of the ship based on whether it could be placed at the current location.
-        if(player.canPlaceShipAt(tempPlacingPosition.x, tempPlacingPosition.y,
-                SelectionGrid.BOAT_SIZES[placingShipIndex],placingShip.isSideways())) {
-            placingShip.setShipPlacementColour(Ship.ShipPlacementColour.Valid);
+        if(jugador.sepuedePosicionarBarcoen(tempPosicionPosicionamiento.x, tempPosicionPosicionamiento.y,
+                SeleccionPanel.BARCO_SIZES[posicionBarcoIndex],posicionamientoBarco.isTorcido())) {
+            posicionamientoBarco.setColorPosicionBarco(Barco.ColorPosicionBarco.Valid);
         } else {
-            placingShip.setShipPlacementColour(Ship.ShipPlacementColour.Invalid);
+            posicionamientoBarco.setColorPosicionBarco(Barco.ColorPosicionBarco.Invalid);
         }
     }
 
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        Position mousePosition = new Position(e.getX(), e.getY());
-        if(gameState == GameState.PlacingShips && player.isPositionInside(mousePosition)) {
+        Posicion mousePosition = new Posicion(e.getX(), e.getY());
+        if(gameState == GameState.PlacingShips && jugador.esPosicionMarcada(mousePosition)) {
             tryPlaceShip(mousePosition);
-        } else if(gameState == GameState.FiringShots && computer.isPositionInside(mousePosition)) {
+        } else if(gameState == GameState.FiringShots && computadora.esPosicionInside(mousePosition)) {
             tryFireAtComputer(mousePosition);
         }
         repaint();
@@ -211,7 +211,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     @Override
     public void mouseMoved(MouseEvent e) {
         if(gameState != GameState.PlacingShips) return;
-        tryMovePlacingShip(new Position(e.getX(), e.getY()));
+        tryMovePlacingShip(new Posicion(e.getX(), e.getY()));
         repaint();
     }
 
