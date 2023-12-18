@@ -31,7 +31,7 @@ public class IAInteligente extends BattleShipIA{
         Collections.shuffle(movimientovalido);
     }
     @Override
-    public Posicion selecionarMovimiento() {
+    public Posicion seleccionarMovimiento() {
         if (debugIA) System.out.println("\nInicio de turno===========");
         Posicion seleccionarMovimiento;
         // If a ship has been hit, but not destroyed
@@ -45,7 +45,7 @@ public class IAInteligente extends BattleShipIA{
             if (maximizaraleatoadya) {
                 seleccionarMovimiento = EncontrarMejorPosicionAbierta();
             } else {
-                // Use a random move
+
                 seleccionarMovimiento = movimientovalido.get(0);
             }
         }
@@ -58,39 +58,39 @@ public class IAInteligente extends BattleShipIA{
         return seleccionarMovimiento;
     }
 
-        private Posicion getAtaqueInteligente() {
-            List<Posicion> MovimientoSugerido = getMovimientoInteligenteAdya();
-            Collections.shuffle(MovimientoSugerido);
-            return  MovimientoSugerido.get(0);
+    private Posicion getAtaqueInteligente() {
+        List<Posicion> MovimientoSugerido = getMovimientoInteligenteAdya();
+        Collections.shuffle(MovimientoSugerido);
+        return  MovimientoSugerido.get(0);
+    }
+
+    private Posicion getSmarterAtaque() {
+        List<Posicion> MovimientoSugerido = getMovimientoInteligenteAdya();
+        for(Posicion posibleMovimientoOptimo : MovimientoSugerido) {
+            if(alMenosDosImpactosEnDirección(posibleMovimientoOptimo,Posicion.Izquierda)) return posibleMovimientoOptimo;
+            if(alMenosDosImpactosEnDirección(posibleMovimientoOptimo,Posicion.Derecha)) return posibleMovimientoOptimo;
+            if(alMenosDosImpactosEnDirección(posibleMovimientoOptimo,Posicion.Abajo)) return posibleMovimientoOptimo;
+            if(alMenosDosImpactosEnDirección(posibleMovimientoOptimo,Posicion.Arriba)) return posibleMovimientoOptimo;
         }
 
-        private Posicion getSmarterAtaque() {
-            List<Posicion> MovimientoSugerido = getMovimientoInteligenteAdya();
-            for(Posicion posibleMovimientoOptimo : MovimientoSugerido) {
-                if(alMenosDosImpactosEnDirección(posibleMovimientoOptimo,Posicion.Izquierda)) return posibleMovimientoOptimo;
-                if(alMenosDosImpactosEnDirección(posibleMovimientoOptimo,Posicion.Derecha)) return posibleMovimientoOptimo;
-                if(alMenosDosImpactosEnDirección(posibleMovimientoOptimo,Posicion.Abajo)) return posibleMovimientoOptimo;
-                if(alMenosDosImpactosEnDirección(posibleMovimientoOptimo,Posicion.Arriba)) return posibleMovimientoOptimo;
-            }
-            // No optimal choice found, just randomise the move.
-            Collections.shuffle(MovimientoSugerido);
-            return  MovimientoSugerido.get(0);
-        }
+        Collections.shuffle(MovimientoSugerido);
+        return  MovimientoSugerido.get(0);
+    }
 
-        private Posicion  EncontrarMejorPosicionAbierta() {
-            Posicion position = movimientovalido.get(0);;
-            int highestNotAttacked = -1;
-            for(int i = 0; i < movimientovalido.size(); i++) {
-                int testCount = getCantidadNoAtacadaAdyacente(movimientovalido.get(i));
-                if(testCount == 4) { // Maximum found, just return immediately
-                    return movimientovalido.get(i);
-                } else if(testCount > highestNotAttacked) {
-                    highestNotAttacked = testCount;
-                    position = movimientovalido.get(i);
-                }
+    private Posicion  EncontrarMejorPosicionAbierta() {
+        Posicion position = movimientovalido.get(0);
+        int highestNotAttacked = -1;
+        for(int i = 0; i < movimientovalido.size(); i++) {
+            int testCount = getCantidadNoAtacadaAdyacente(movimientovalido.get(i));
+            if(testCount == 4) { // Maximum found, just return immediately
+                return movimientovalido.get(i);
+            } else if(testCount > highestNotAttacked) {
+                highestNotAttacked = testCount;
+                position = movimientovalido.get(i);
             }
-            return position;
         }
+        return position;
+    }
 
     private int getCantidadNoAtacadaAdyacente(Posicion posicion) {
         List<Posicion> celdasadyacentes = getceldasadyacentes(posicion);
