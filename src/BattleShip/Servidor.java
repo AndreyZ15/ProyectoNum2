@@ -8,7 +8,10 @@ public class Servidor {
     private ServerSocket serverSocket;
 
     public Servidor(int puerto) throws IOException {
+        System.out.println("Esperando a que se conecte un jugador...");
+        /*
         serverSocket = new ServerSocket(puerto);
+         */
     }
 
     public Socket esperarConexion() throws IOException {

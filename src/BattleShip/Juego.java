@@ -16,82 +16,56 @@ public class Juego implements KeyListener {
     private ObjectInputStream inputStream;
 
     public Juego() {
-        // Seleccionar la dificultad
-        String[] options = new String[] {"Facil", "Medio", "Dificil"};
-        String message = "Selecione la dificultad con la que desea jugar";
-        int difficultyChoice = JOptionPane.showOptionDialog(null, message,
-                "Seleccione la dificultad",
+
+        String[] initialOptions = new String[]{"PvP", "PvC"};
+        String initialMessage = "Escoge una opcion";
+        int initialChoice = JOptionPane.showOptionDialog(null, initialMessage,
+                "Opciones iniciales",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, options, options[0]);
+                null, initialOptions, initialOptions[0]);
 
-        JFrame frame = new JFrame("Battleship");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        if (initialChoice == 0) {
+            String[] opciones3 = new String[]{"Servidor", "Cliente"};
+            String mensaje3 = "Escoge una opcion";
+            int initialChoice3 = JOptionPane.showOptionDialog(null, mensaje3,
+                    "Opciones iniciales",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                    null, opciones3, opciones3[0]);
 
-        gamePanel = new GamePanel(difficultyChoice);
-        frame.getContentPane().add(gamePanel);
+            if(initialChoice3 == 0){
 
-        frame.addKeyListener(this);
-        frame.pack();
-        frame.setVisible(true);
+                Cliente cliente = new Cliente();
 
-        if (setupMultijugador()) {
-            // Iniciar el hilo para manejar la comunicación del jugador
-            Thread thread = new Thread(this::manejarComunicacion);
-            thread.start();
+            } else if(initialChoice3 == 1){
+                String[] opciones4 = new String[]{"Lo", "Sentimos"};
+                String message = "No se pudo realizar esta parte por diversas cosas";
+                 JOptionPane.showOptionDialog(null, message,
+                        "Perdon",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                         null, opciones4, opciones4[0]);
+
+
+            }
+        } else if (initialChoice == 1) {
+            String[] optiones2 = new String[]{"Facil", "Medio", "Dificil"};
+            String message = "Selecione la dificultad con la que desea jugar";
+            int difficultyChoice = JOptionPane.showOptionDialog(null, message,
+                    "Seleccione la dificultad",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                    null, optiones2, optiones2[0]);
+
+            JFrame frame = new JFrame("Battleship");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setResizable(false);
+
+            gamePanel = new GamePanel(difficultyChoice);
+            frame.getContentPane().add(gamePanel);
+
+            frame.addKeyListener(this);
+            frame.pack();
+            frame.setVisible(true);
         }
     }
-    private boolean setupMultijugador() {
-        String[] options = new String[]{"Crear partida", "Unirse a partida"};
-        int choice = JOptionPane.showOptionDialog(null, "Seleccione una opción para el multijugador",
-                "Multijugador", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, options, options[0]);
-
-        if (choice == 0) { // Crear partida
-            try {
-                ServerSocket serverSocket = new ServerSocket(PUERTO);
-                System.out.println("Esperando a que se conecte un jugador...");
-                socket = serverSocket.accept();
-                System.out.println("Jugador conectado");
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-        } else if (choice == 1) { // Unirse a partida
-            String ip = JOptionPane.showInputDialog("Introduzca la dirección IP del servidor:");
-            try {
-                socket = new Socket(ip, PUERTO);
-                System.out.println("Conectado al servidor");
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-        } else {
-            return false;
-        }
-
-        try {
-            outputStream = new ObjectOutputStream(socket.getOutputStream());
-            inputStream = new ObjectInputStream(socket.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
-
-    private void manejarComunicacion() {
-        try {
-            while (true) {
-                // Manejar la comunicación con el otro jugador aquí
-                // Puedes usar outputStream.writeObject() y inputStream.readObject() para enviar y recibir datos
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void keyPressed(KeyEvent e) {
         gamePanel.handleInput(e.getKeyCode());

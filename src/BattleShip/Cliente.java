@@ -57,8 +57,4 @@ public class Cliente {
         }
     }
 
-    public static void main(String[] args) {
-        Cliente cliente = new Cliente();
-        // Puedes utilizar el objeto cliente para enviar y recibir datos
-    }
 }
