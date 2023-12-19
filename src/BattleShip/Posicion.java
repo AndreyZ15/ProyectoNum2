@@ -6,7 +6,7 @@ public class Posicion {
 
     public static final Posicion Abajo = new Posicion(0,1);
 
-    public static final Posicion Arriba = new Posicion(0,1);
+    public static final Posicion Arriba = new Posicion(0,-1);
 
     public static final Posicion Izquierda = new Posicion (-1,0);
 
