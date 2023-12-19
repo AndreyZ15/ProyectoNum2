@@ -27,18 +27,4 @@ public class BattleShipIA {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

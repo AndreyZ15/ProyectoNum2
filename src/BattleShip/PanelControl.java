@@ -31,7 +31,7 @@ public class PanelControl extends Rectangulo{
 
     public void JuegoTerminado(boolean playerWon) {
         lineasuperior = (playerWon) ? juegoGanado : juegoPerdido;
-        lineainferior = juegoPerdido;
+        lineainferior = reinicio;
     }
 
 
