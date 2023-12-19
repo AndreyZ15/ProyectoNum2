@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 public class Juego implements KeyListener {
 
     public static void main(String[] args) {
-        Juego game = new Juego();
+        Juego juego = new Juego();
     }
 
     private GamePanel gamePanel;

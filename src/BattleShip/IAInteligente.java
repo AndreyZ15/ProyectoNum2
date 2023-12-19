@@ -4,8 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class IAInteligente extends BattleShipIA{
-
-
     private List<Posicion> Golpesbarco;
 
     private final boolean debugIA = false;
@@ -209,10 +207,6 @@ public class IAInteligente extends BattleShipIA{
         }
         return true;
     }
-
-
-
-
 
 
 }

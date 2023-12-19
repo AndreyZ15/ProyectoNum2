@@ -35,7 +35,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     public GamePanel(int aiChoice) {
         computadora = new SeleccionPanel(0,0);
         jugador = new SeleccionPanel(0,computadora.getAltura()+50);
-        setBackground(new Color(42, 136, 163));
+        setBackground(new Color(28, 183, 241));
         setPreferredSize(new Dimension(computadora.getAncho(), jugador.getPosicion().y + jugador.getAltura()));
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -207,14 +207,12 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         repaint();
     }
 
-
     @Override
     public void mouseMoved(MouseEvent e) {
         if(gameState != GameState.PlacingShips) return;
         tryMovePlacingShip(new Posicion(e.getX(), e.getY()));
         repaint();
     }
-
 
     @Override
     public void mouseClicked(MouseEvent e) {}

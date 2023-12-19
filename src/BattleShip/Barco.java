@@ -52,7 +52,9 @@ public class Barco {
         seccionesDestruidas++;
     }
 
-    public boolean isDestruido() { return seccionesDestruidas >= segmentos; }
+    public boolean isDestruido() {
+        return seccionesDestruidas >= segmentos;
+    }
 
 
     public void setCrearPosicion(Posicion pantallaPosicion, Posicion crearPosicion) {
