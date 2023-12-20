@@ -2,9 +2,9 @@ package BattleShip;
 import java.awt.*;
 
 public class Marcador extends Rectangulo {
-    private final Color Golpeado = new Color(219, 23, 23, 180);
+    private final Color Golpeado = new Color(178, 1, 1, 180);
 
-    private final Color Fallado = new Color(26, 26, 97, 180);
+    private final Color Fallado = new Color(0, 0, 0, 180);
 
     //Redondea las esquinas para que llene el rectangulo un poco menos
     private final int Redondeo = 3;

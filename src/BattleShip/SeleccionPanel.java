@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class SeleccionPanel extends Rectangulo{
 
-    public static final int CELDA_SIZE = 30;
+    public static final int CELDA_SIZE = 40;
     public static final int GRID_ANCHO = 10;
     public static final int GRID_LARGO = 10;
     public static final int[] BARCO_SIZES = {5,4,3,3,2};

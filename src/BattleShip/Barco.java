@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.image.BufferedImage;
 
 public class Barco {
 
@@ -18,6 +19,7 @@ public class Barco {
     private boolean isTorcido;
 
     private int seccionesDestruidas;
+
     private ColorPosicionBarco colorPosicionBarco;
 
     public Barco(Posicion pantallaPosicion, Posicion crearPosicion, int segmentos, boolean isTorcido) {
@@ -31,7 +33,7 @@ public class Barco {
 
     public void paint(Graphics g) {
         if(colorPosicionBarco == ColorPosicionBarco.Placed) {
-            g.setColor(seccionesDestruidas >= segmentos ? Color.RED : Color.DARK_GRAY);
+            g.setColor(seccionesDestruidas >= segmentos ? Color.RED : Color.GRAY);
         } else {
             g.setColor(colorPosicionBarco == ColorPosicionBarco.Valid ? Color.GREEN : Color.RED);
         }

@@ -11,10 +11,15 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
     public enum GameState { PlacingShips, FiringShots, GameOver }
 
-
+    private Image fondo;
     private PanelControl panelControl;
 
     private SeleccionPanel computadora;
+    private Image imagenBarco1;
+    private Image imagenBarco2;
+    private Image imagenBarco3;
+    private Image imagenBarco4;
+    private Image imagenBarco5;
 
     private SeleccionPanel jugador;
 
@@ -35,7 +40,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     public GamePanel(int aiChoice) {
         computadora = new SeleccionPanel(0,0);
         jugador = new SeleccionPanel(0,computadora.getAltura()+50);
-        setBackground(new Color(28, 183, 241));
+        setBackground(new Color(17, 0, 105));
         setPreferredSize(new Dimension(computadora.getAncho(), jugador.getPosicion().y + jugador.getAltura()));
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -43,11 +48,20 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         else iaControlador = new IAInteligente(jugador,aiChoice == 2,aiChoice == 2);
         panelControl = new PanelControl(new Posicion(0,computadora.getAltura()+1),computadora.getAncho(),49);
         restart();
+
+        try {
+            fondo = new ImageIcon(getClass().getResource("mar3.jpg")).getImage();
+            System.out.println("Imagen cargada con éxito.");
+        } catch (Exception e) {
+            System.err.println("Error al cargar la imagen: " + e.getMessage());
+        }
+
     }
 
 
-    public void paint(Graphics g) {
+    public void paint(Graphics g ) {
         super.paint(g);
+        g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
         computadora.paint(g);
         jugador.paint(g);
         if(gameState == GameState.PlacingShips) {
@@ -175,7 +189,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
     private void updateShipPlacement(Posicion targetPos) {
         // Constrain to fit inside the grid
-        if(posicionamientoBarco.isDestruido()) {
+        if(posicionamientoBarco.isTorcido()) {
             targetPos.x = Math.min(targetPos.x, SeleccionPanel.GRID_ANCHO - SeleccionPanel.BARCO_SIZES[posicionBarcoIndex]);
         } else {
             targetPos.y = Math.min(targetPos.y, SeleccionPanel.GRID_LARGO - SeleccionPanel.BARCO_SIZES[posicionBarcoIndex]);
