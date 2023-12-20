@@ -2,6 +2,7 @@ package BattleShip;
 
 import java.awt.*;
 
+
 public class PanelControl extends Rectangulo{
     private final Font font = new Font("Arial", Font.BOLD, 20);
 
@@ -19,29 +20,49 @@ public class PanelControl extends Rectangulo{
 
     private String lineainferior;
 
+    /*
+    Configura el estado del panel para dibujar el fondo
+     */
     public PanelControl(Posicion posicion, int ancho, int alto) {
         super(posicion, ancho, alto);
         reset();
     }
 
+    /*
+    Restablece a los valores predeterminados,
+    para la ubicacion del barco
+     */
     public void reset() {
         lineasuperior = colocacionBarco1;
         lineainferior = colocacionBarco2;
     }
 
+    /*
+    Establece el mensaje para mostrar dependiendo si el jugador gano o no
+     */
     public void JuegoTerminado(boolean playerWon) {
         lineasuperior = (playerWon) ? juegoGanado : juegoPerdido;
         lineainferior = reinicio;
     }
 
-
+    /*
+    Establece el mensaje a mostrar en la línea superior
+     */
     public void setLineasuperior(String message) {
         lineasuperior = message;
     }
 
+    /*
+    Estblece el mensaje a mostrar en la línea inferior
+     */
     public void setLineainferior(String message) {
         lineainferior = message;
     }
+
+    /*
+    Dibuja el cuadro de color gris con la fuente color negra
+    usando los mensajes de la línea superior e inferior.
+     */
     public void paint(Graphics g) {
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(posicion.x, posicion.y, ancho, altura);

@@ -13,16 +13,28 @@ public class Marcador extends Rectangulo {
 
     private Barco barcoMarcado;
 
+    /*
+    Prepara el marcador con un estado predeterminado en el que,
+    está listo para dibujar en una posicion especificada
+     */
     public Marcador(int x, int y, int width, int height) {
         super(x, y, width, height);
         reset();
     }
 
+
+    /*
+    Se restablece a ningun barco referenciado y con el marcador invisble
+     */
     public void reset() {
         barcoMarcado = null;
         verMarca = false;
     }
 
+    /*
+    Si no está marcado le dira al barco asociado que otra seccion,
+    fue destruida hace que la marca sea visible
+     */
     public void Marcado() {
         if(!verMarca && esBarco()) {
             barcoMarcado.destruirSeccion();
@@ -30,22 +42,37 @@ public class Marcador extends Rectangulo {
         verMarca = true;
     }
 
+    /*
+    Obtiene si el marcador ya ha interactuado
+     */
     public boolean Marca() {
         return verMarca;
     }
 
+    /*
+    Establece el barco en la referencia especificada
+    y cambia de color si el marcador está revelado
+     */
     public void setBarco(Barco barco) {
         this.barcoMarcado = barco;
     }
-
+    /*
+    Obtiene si el marcador tiene un barco asociado
+     */
     public boolean esBarco() {
         return barcoMarcado != null;
     }
 
+    /*
+    Obtiene el barco si no hay ninguno es null
+     */
     public Barco getBarcoCerca() {
         return barcoMarcado;
     }
 
+    /*
+    Si es fallo marca de color negro y si acierta marca de color rojo
+     */
     public void paint(Graphics g) {
         if(!verMarca) return;
 

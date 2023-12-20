@@ -1,6 +1,5 @@
 package BattleShip;
 
-import javax.swing.text.Position;
 
 public class Posicion {
 
@@ -14,42 +13,37 @@ public class Posicion {
 
     public static final Posicion Zero = new Posicion(0,0);
     public int x;
-    /**
-     * Y coordinate.
-     */
+
     public int y;
 
+    /*
+    Establece el valor de la Posicion
+     */
     public Posicion(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
+    /*
+    Copia el constructor para crear una nueva posicion
+     */
     public Posicion(Posicion posicionToCopy) {
         this.x = posicionToCopy.x;
         this.y = posicionToCopy.y;
     }
-    public void setPosicion(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
 
+    /*
+    Actualiza la posicion añadiendo el valor de la otra posicion
+     */
     public void add(Posicion otherPosicion) {
         this.x += otherPosicion.x;
         this.y += otherPosicion.y;
     }
 
-    public double distanceTo(Posicion otherPosicion) {
-        return Math.sqrt(Math.pow(x-otherPosicion.x,2)+Math.pow(y-otherPosicion.y,2));
-    }
-    public void multiply(int amount) {
-        x *= amount;
-        y *= amount;
-    }
-
-    public void subtract(Posicion otherPosicion) {
-        this.x -= otherPosicion.x;
-        this.y -= otherPosicion.y;
-    }
+    /*
+    Compara la posicion de un objeto con otro
+    compara x, y para la igualdad
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,10 +52,8 @@ public class Posicion {
         return x == posicion.x && y == posicion.y;
     }
 
-    /**
-     * Gets a string version of the Position.
-     *
-     * @return A string in the form (x, y)
+    /*
+        Obtiene una version string de la posicion
      */
     @Override
     public String toString() {
