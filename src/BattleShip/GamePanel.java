@@ -10,33 +10,21 @@ import java.awt.event.MouseMotionListener;
 public class GamePanel extends JPanel implements MouseListener, MouseMotionListener {
 
     public enum GameState { PlacingShips, FiringShots, GameOver }
-
     private Image fondo;
     private PanelControl panelControl;
-
     private SeleccionPanel computadora;
-    private Image imagenBarco1;
-    private Image imagenBarco2;
-    private Image imagenBarco3;
-    private Image imagenBarco4;
-    private Image imagenBarco5;
-
     private SeleccionPanel jugador;
-
     private BattleShipIA iaControlador;
-
-
     private Barco posicionamientoBarco;
-
     private Posicion tempPosicionPosicionamiento;
-
     private int posicionBarcoIndex;
-
     private GameState gameState;
-
     public static boolean debugModeActive;
 
-
+    /*
+    Es el ejecutador de la computadora asi como del jugador para que
+    todo inicie desde cero y tambien la imagen del fondo
+    */
     public GamePanel(int aiChoice) {
         computadora = new SeleccionPanel(0,0);
         jugador = new SeleccionPanel(0,computadora.getAltura()+50);
@@ -58,7 +46,9 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
     }
 
-
+    /*
+    Pinta el recuadro del la batalla asi tambien como donde se posicionan los barcos
+     */
     public void paint(Graphics g ) {
         super.paint(g);
         g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
@@ -70,7 +60,9 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         panelControl.paint(g);
     }
 
-
+    /*
+    Maneja el imput de respuesta del teclado sobre el girar los barcos
+     */
     public void handleInput(int keyCode) {
         if(keyCode == KeyEvent.VK_ESCAPE) {
             System.exit(1);
@@ -85,7 +77,9 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         repaint();
     }
 
-
+    /*
+    En este metodo se reinicia todo al principio por si se quiere volver a jugar de nuevo
+     */
     public void restart() {
         computadora.reset();
         jugador.reset();
@@ -105,6 +99,9 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     }
 
 
+    /*
+    Prueba si se puede o no colocar los barcos en algun lugar que no haya un barco ya puesto
+     */
     private void tryPlaceShip(Posicion mousePosition) {
         Posicion targetPosition = jugador.getPosicionenPanel(mousePosition.x, mousePosition.y);
         updateShipPlacement(targetPosition);
@@ -113,8 +110,9 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
             placeShip(targetPosition);
         }
     }
-
-
+    /*
+    Coloca los barcos en la pantalla y delimita quien acaque y quien va despues
+     */
     private void placeShip(Posicion targetPosition) {
         posicionamientoBarco.setColorPosicionBarco(Barco.ColorPosicionBarco.Placed);
         jugador.colocarBarco(posicionamientoBarco,tempPosicionPosicionamiento.x,tempPosicionPosicionamiento.y);
@@ -133,20 +131,21 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         }
     }
 
-
+    /*
+    Ignora si se va a dipara en un lugar ya disparado
+     */
     private void tryFireAtComputer(Posicion mousePosition) {
         Posicion targetPosition = computadora.getPosicionenPanel(mousePosition.x,mousePosition.y);
-        // Ignore if position was already clicked
         if(!computadora.esPosicionMarcada(targetPosition)) {
             doPlayerTurn(targetPosition);
-            // Only do the AI turn if the game didn't end from the player's turn.
             if(!computadora.estantodoslosbarcosdestruidos()) {
                 doAITurn();
             }
         }
     }
-
-
+    /*
+    Muestra si se ha chocado o Fallado o si se ha destruido un barco y donde se disparó
+     */
     private void doPlayerTurn(Posicion targetPosition) {
         boolean hit = computadora.markPosition(targetPosition);
         String hitMiss = hit ? "Chocado" : "Fallado";
@@ -156,12 +155,13 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         }
         panelControl.setLineasuperior("Jugador " + hitMiss + " " + targetPosition + destroyed);
         if(computadora.estantodoslosbarcosdestruidos()) {
-            // Player wins!
             gameState = GameState.GameOver;
             panelControl.JuegoTerminado(true);
         }
     }
-
+    /*
+    Realiza el turno de la computadora y hace lo mismo de arriba muestra si chocó o no
+     */
     private void doAITurn() {
         Posicion aiMove = iaControlador.seleccionarMovimiento();
         boolean hit = jugador.markPosition(aiMove);
@@ -172,13 +172,13 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         }
         panelControl.setLineainferior("Computadora " + hitMiss + " " + aiMove + destroyed);
         if(jugador.estantodoslosbarcosdestruidos()) {
-            // Computer wins!
             gameState = GameState.GameOver;
             panelControl.JuegoTerminado(false);
         }
     }
-
-
+    /*
+    Prueba por donde se están moviendo los barcos para seguirle el rastro
+     */
     private void tryMovePlacingShip(Posicion mousePosition) {
         if(jugador.esPosicionInside(mousePosition)) {
             Posicion targetPos = jugador.getPosicionenPanel(mousePosition.x, mousePosition.y);
@@ -186,7 +186,9 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         }
     }
 
-
+    /*
+    Oficializa el lugar donde se puso el barco
+     */
     private void updateShipPlacement(Posicion targetPos) {
         // Constrain to fit inside the grid
         if(posicionamientoBarco.isTorcido()) {
@@ -209,7 +211,11 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         }
     }
 
-
+    /*
+    El resto de estos metodos son para el control del mouse y del teclado como el
+    dejar apretado, soltar y eso por eso utiliza @Override porque cambia
+    contantemente depende de que se realice
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
         Posicion mousePosition = new Posicion(e.getX(), e.getY());

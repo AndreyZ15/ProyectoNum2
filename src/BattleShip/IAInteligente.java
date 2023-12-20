@@ -12,7 +12,9 @@ public class IAInteligente extends BattleShipIA{
 
     private boolean maximizaraleatoadya;
 
-
+    /*
+    Es el metodo que se utiliza para inicializar la ia del modo dificil ya que es mas habil que las demas ias
+     */
     public IAInteligente(SeleccionPanel jugadorPanel, boolean preferirmovilinea, boolean maximizaraleatoadya){
         super(jugadorPanel);
         Golpesbarco = new ArrayList<>();
@@ -21,6 +23,9 @@ public class IAInteligente extends BattleShipIA{
         Collections.shuffle(movimientovalido);
 
     }
+    /*
+    Overridea el metodo reset para reiniciar el juego
+     */
 
     @Override
     public void reset() {
@@ -28,11 +33,14 @@ public class IAInteligente extends BattleShipIA{
         Golpesbarco.clear();
         Collections.shuffle(movimientovalido);
     }
+    /*
+    Selecciona un movimiento para y trae al metodo movimiento
+    inteligente para hacerlo de una mejor manera explicado abajo
+     */
     @Override
     public Posicion seleccionarMovimiento() {
         if (debugIA) System.out.println("\nInicio de turno===========");
         Posicion seleccionarMovimiento;
-        // If a ship has been hit, but not destroyed
         if (Golpesbarco.size() > 0) {
             if (preferirmovilinea) {
                 seleccionarMovimiento = getSmarterAtaque();
@@ -55,13 +63,18 @@ public class IAInteligente extends BattleShipIA{
         }
         return seleccionarMovimiento;
     }
-
+    /*
+    Selecciona el movimiento de manera inteligente por si consigue chocar algun barco que se
+    siga la logica y ataca cerca de este mismo para hundirlo lo mas rapido
+     */
     private Posicion getAtaqueInteligente() {
         List<Posicion> MovimientoSugerido = getMovimientoInteligenteAdya();
         Collections.shuffle(MovimientoSugerido);
         return  MovimientoSugerido.get(0);
     }
-
+    /*
+    Hace una lista de cual es el movimiento mas optimo para realizar y lo ejecuta
+     */
     private Posicion getSmarterAtaque() {
         List<Posicion> MovimientoSugerido = getMovimientoInteligenteAdya();
         for(Posicion posibleMovimientoOptimo : MovimientoSugerido) {
@@ -74,7 +87,9 @@ public class IAInteligente extends BattleShipIA{
         Collections.shuffle(MovimientoSugerido);
         return  MovimientoSugerido.get(0);
     }
-
+    /*
+    Coloca el barco en la mejor posicion con respecto a los otros barcos
+     */
     private Posicion  EncontrarMejorPosicionAbierta() {
         Posicion position = movimientovalido.get(0);
         int highestNotAttacked = -1;
@@ -89,7 +104,9 @@ public class IAInteligente extends BattleShipIA{
         }
         return position;
     }
-
+    /*
+    Se trae la cantidad de tiros cercas que no hayan impactado para predecir disparos
+     */
     private int getCantidadNoAtacadaAdyacente(Posicion posicion) {
         List<Posicion> celdasadyacentes = getceldasadyacentes(posicion);
         int cantidadNoatacada= 0;
@@ -100,9 +117,9 @@ public class IAInteligente extends BattleShipIA{
         }
         return cantidadNoatacada;
     }
-
-
-
+    /*
+    Piensa de una mejor manera pare donde puede estar el barco y ya este tiene dos impactos en una dirección
+     */
     private boolean alMenosDosImpactosEnDirección(Posicion empezar, Posicion direccion) {
         Posicion probarPosicon = new Posicion(empezar);
         probarPosicon.add(direccion);
@@ -112,7 +129,9 @@ public class IAInteligente extends BattleShipIA{
         if(debugIA) System.out.println("Smarter match found AT: " + empezar + " TO: " + probarPosicon);
         return true;
     }
-
+    /*
+    Piensa cuál es el mejor lugar para disparar pensando en los demas tiros que ya realizo
+     */
     private List<Posicion> getMovimientoInteligenteAdya() {
         List<Posicion> resultado = new ArrayList<>();
         for(Posicion PosGolpeBarco : Golpesbarco) {
@@ -129,7 +148,9 @@ public class IAInteligente extends BattleShipIA{
         }
         return resultado;
     }
-
+    /*
+    Imprime la posición en la que está disparando
+     */
     private void printPosicionList(String messagePrefix, List<Posicion> data) {
         String resultado = "[";
         for(int i = 0; i < data.size(); i++) {
@@ -141,9 +162,9 @@ public class IAInteligente extends BattleShipIA{
         resultado += "]";
         System.out.println(messagePrefix + " " + resultado);
     }
-
-
-
+    /*
+    Revisa las celdas adyacentes para utilizarlo en métodos de arriba
+     */
     private List<Posicion> getceldasadyacentes(Posicion posicion) {
         List<Posicion> resultado = new ArrayList<>();
         if(posicion.x != 0) {
@@ -168,7 +189,9 @@ public class IAInteligente extends BattleShipIA{
         }
         return resultado;
     }
-
+    /*
+    Actualiza a donde ha realizado golpes de barcos para utilizar esa logica en metodos de arriba
+     */
     private void actualizarGolpesBarco(Posicion probarPosicion) {
         Marcador marcador = jugadorPanel.getMarcadorenlaPosicion(probarPosicion);
         if(marcador.esBarco()) {
@@ -191,9 +214,9 @@ public class IAInteligente extends BattleShipIA{
             }
         }
     }
-
-
-
+    /*
+    Hagarra todas las posiciones en una lista para dividirlo y utilizarlo de manera más rápida o mejor
+     */
     private boolean containstodaslasposiciones(List<Posicion> posicionesToBuscar, List<Posicion> listToBuscarIn) {
         for(Posicion buscarPosicion : posicionesToBuscar) {
             boolean encontrar = false;
@@ -207,7 +230,5 @@ public class IAInteligente extends BattleShipIA{
         }
         return true;
     }
-
-
 }
 
